@@ -25,5 +25,4 @@ func main() {
 
 	fmt.Println("GOBIN\t", gobin)
 	fmt.Println("Success!")
-
 }
