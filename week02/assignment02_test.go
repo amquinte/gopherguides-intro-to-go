@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -19,10 +18,11 @@ func TestArray(t *testing.T) {
 		t.Errorf("Expected lengths to be the same but they are different")
 	}
 
-	//Itereate through act and assert that both arrays are equal
+	//Iterate through act and assert that both arrays are equal
 	for i, n := range act {
 		result := exp[i]
-		fmt.Printf("The result is %d\n", result)
+
+		//Compares values for equality
 		if result != n {
 			t.Errorf("Expected %d but got %d", n, result)
 		}
@@ -46,7 +46,8 @@ func TestSlice(t *testing.T) {
 	//Iterate through act and assert that the contents of both slices are equal
 	for i, n := range act {
 		result := exp[i]
-		fmt.Printf("The result is %d\n", result)
+
+		//Compares values for equality
 		if result != n {
 			t.Errorf("Expected %d but got %d", n, result)
 		}
@@ -69,22 +70,22 @@ func TestMap(t *testing.T) {
 
 	//Test to see if the length of act and exp are the same
 	if len(exp) != len(act) {
-		t.Errorf("Expected lengths of the maps to be the same bu they are not")
+		t.Errorf("Expected lengths of the maps to be the same but they are not")
 	}
 
 	//Iterate through act and assert that the contents of both maps are equal
 	for k := range act {
 		expected := exp[k]
 		actual, ok := act[k]
+
+		//Checks if key exists in the map
 		if !ok {
 			t.Errorf("Key not found: %s", k)
 		}
 
+		//Compares values of both maps to see if they match
 		if actual != expected {
 			t.Errorf("Expected %d but got %d", expected, actual)
 		}
-		fmt.Println("The key is ", k)
-		fmt.Println("The values are: ", expected, actual)
 	}
-	//t.Fatalf("Reached the end of TestMap")
 }
