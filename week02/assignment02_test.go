@@ -1,9 +1,90 @@
 package main
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
-func TestSimple(t *testing.T) {
-	if simple() == true {
-		t.Error("expected false, got true")
+func TestArray(t *testing.T) {
+	exp := [4]int{1, 2, 3, 4}
+	act := [4]int{}
+
+	//Copy contents of exp into act
+	for i, n := range exp {
+		act[i] = n
 	}
+
+	//Test to see if the length of act and exp are the same
+	if len(exp) != len(act) {
+		t.Errorf("Expected lengths to be the same but they are different")
+	}
+
+	//Itereate through act and assert that both arrays are equal
+	for i, n := range act {
+		result := exp[i]
+		fmt.Printf("The result is %d\n", result)
+		if result != n {
+			t.Errorf("Expected %d but got %d", n, result)
+		}
+	}
+}
+
+func TestSlice(t *testing.T) {
+	exp := []int{1, 2, 3, 4}
+	act := []int{}
+
+	//Copy content of exp into act
+	for _, n := range exp {
+		act = append(act, n)
+	}
+
+	//Test to see if the length of act and exp are the same
+	if len(exp) != len(act) {
+		t.Errorf("Expected lengths to be the same but they are different")
+	}
+
+	//Iterate through act and assert that the contents of both slices are equal
+	for i, n := range act {
+		result := exp[i]
+		fmt.Printf("The result is %d\n", result)
+		if result != n {
+			t.Errorf("Expected %d but got %d", n, result)
+		}
+	}
+}
+
+func TestMap(t *testing.T) {
+	exp := map[string]int{
+		"John":     10,
+		"Samantha": 12,
+		"Bob":      15,
+		"Stacy":    17,
+	}
+	act := map[string]int{}
+
+	//Copy content of exp into act
+	for i, n := range exp {
+		act[i] = n
+	}
+
+	//Test to see if the length of act and exp are the same
+	if len(exp) != len(act) {
+		t.Errorf("Expected lengths of the maps to be the same bu they are not")
+	}
+
+	//Iterate through act and assert that the contents of both maps are equal
+	for k := range act {
+		expected := exp[k]
+		actual, ok := act[k]
+		if !ok {
+			t.Errorf("Key not found: %s", k)
+		}
+
+		if actual != expected {
+			t.Errorf("Expected %d but got %d", expected, actual)
+		}
+		fmt.Println("The key is ", k)
+		fmt.Println("The values are: ", expected, actual)
+	}
+	//t.Fatalf("Reached the end of TestMap")
 }
