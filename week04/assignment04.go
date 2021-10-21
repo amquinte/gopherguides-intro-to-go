@@ -22,3 +22,9 @@ type Setuper interface {
 type Teardowner interface {
 	Teardown(v Venue) error
 }
+
+func (v *Venue) Entertain(num int, list []Entertainer) {
+	for _, n := range list {
+		n.Perform(*v)
+	}
+}
