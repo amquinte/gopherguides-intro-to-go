@@ -50,6 +50,9 @@ Quickly tests all test files. Returns a simple "ok" or "fail".
 
 - [Go](https://go.dev/)
 
+## Work in Progress:
+- News Service Package
+- Test files for existing source code
 
 ## Future Updates
 
