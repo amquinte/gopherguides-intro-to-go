@@ -9,7 +9,7 @@ type Crew struct {
 }
 
 func (c Crew) Name() string {
-	return "Crew are not allowed to give out their name"
+	return "Crew"
 }
 
 func (c Crew) Perform(v Venue) error {

@@ -6,16 +6,12 @@ import (
 
 type Beatles struct {
 	Member      string
-	IsJohn      bool
 	Performed   bool
 	Helped      bool
 	MinAudience int
 }
 
 func (b Beatles) Name() string {
-	if b.Member == "" {
-		return "Member forgot their name"
-	}
 	return b.Member
 }
 
@@ -29,8 +25,9 @@ func (b *Beatles) Perform(v Venue) error {
 }
 
 func (b *Beatles) Setup(v Venue) error {
-	if b.IsJohn {
-		return fmt.Errorf("John does not help setup")
+	if b.IsJohn() {
+		b.Helped = false
+		return nil
 	}
 
 	if b.Helped == true {
@@ -39,4 +36,12 @@ func (b *Beatles) Setup(v Venue) error {
 
 	b.Helped = true
 	return nil
+}
+
+func (b Beatles) IsJohn() bool {
+	if b.Name() == "John" {
+		return true
+	}
+
+	return false
 }

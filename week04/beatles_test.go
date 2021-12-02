@@ -8,7 +8,7 @@ func Test_Beatles_Name(t *testing.T) {
 	t.Parallel()
 
 	a := Beatles{}
-	expected := "Member forgot their name"
+	expected := ""
 	act := a.Name()
 	if act != expected {
 		t.Fatalf("expected: %s but received %s", expected, act)
@@ -28,7 +28,6 @@ func Test_Beatles_Perform(t *testing.T) {
 	v := Venue{Audience: 15000}
 	b := Beatles{
 		Member:      "John",
-		IsJohn:      true,
 		MinAudience: 10000,
 	}
 
@@ -47,7 +46,6 @@ func Test_Beatles_Setup(t *testing.T) {
 	v := Venue{Audience: 15000}
 	b := Beatles{
 		Member:      "Paul",
-		IsJohn:      false,
 		MinAudience: 10000,
 	}
 

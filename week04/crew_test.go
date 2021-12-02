@@ -11,7 +11,7 @@ func Test_Crew_Name(t *testing.T) {
 	c := Crew{}
 	act := c.Name()
 
-	exp := "Crew are not allowed to give out their name"
+	exp := "Crew"
 	if act != exp {
 		t.Fatalf("expected: %s but received %s", exp, act)
 	}
@@ -21,7 +21,7 @@ func Test_Crew_Perform(t *testing.T) {
 	t.Parallel()
 
 	c := Crew{}
-	v := Venue{Audience: 100}
+	v := Venue{Audience: 0}
 
 	err := c.Perform(v)
 	if err != nil {
