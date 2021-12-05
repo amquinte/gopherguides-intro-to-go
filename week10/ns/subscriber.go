@@ -6,9 +6,8 @@ import (
 )
 
 type Subscriber struct {
-	cancel     context.CancelFunc
-	categories []string
-	suscribed  bool
-	stories    []string
+	cancel    context.CancelFunc
+	suscribed bool
+	stories   chan *Story
 	sync.RWMutex
 }

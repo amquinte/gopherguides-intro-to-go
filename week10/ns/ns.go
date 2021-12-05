@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"sync"
 )
@@ -37,10 +36,10 @@ func (n *Ns) Save() error {
 
 	//Save json to backup.json file
 	//const Filename = "backup.json"
-	err = ioutil.WriteFile(Filename, state, 0777)
-	// if err != nil {
-	// 	return err
-	// }
+	err = os.WriteFile(Filename, state, 0777)
+	if err != nil {
+		return err
+	}
 
 	fmt.Println("State was saved")
 	return nil
@@ -71,7 +70,7 @@ func (n *Ns) LoadFile() error {
 	// 	//return err
 	// }
 
-	data, _ := ioutil.ReadFile(Filename)
+	data, _ := os.ReadFile(Filename)
 	var tmp Ns
 	json.Unmarshal(data, &tmp)
 
