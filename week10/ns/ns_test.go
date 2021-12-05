@@ -19,16 +19,6 @@ func Test_Ns(t *testing.T) {
 	fmt.Println("test passed")
 }
 
-func Test_Ns_Save(t *testing.T) {
-	t.Parallel()
-	//ctx := context.Background()
-	n := &Ns{}
-	err := n.Save()
-	if err != nil {
-		t.Fatalf("Unexpected error: %s", err)
-	}
-}
-
 //Need to figure out how to get this test to pass
 //How can me make Marshall throw an error?
 
@@ -45,7 +35,7 @@ func Test_Ns_Save(t *testing.T) {
 // 	fmt.Println("Second test passed")
 // }
 
-func Test_Ns_CreateFile(t *testing.T) {
+func Test_Ns_File(t *testing.T) {
 	t.Parallel()
 	n := &Ns{}
 
@@ -53,4 +43,20 @@ func Test_Ns_CreateFile(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Unexpected error: %s", err)
 	}
+
+	n = &Ns{Name: "Tony", Age: 28}
+	err = n.Save()
+	if err != nil {
+		t.Fatalf("Unexpected error: %s", err)
+	}
+
+	n1 := Ns{}
+	//fmt.Println(n1)
+	err = n1.LoadFile()
+	if err != nil {
+		t.Fatalf("Unexpected error: %s", err)
+	}
+
+	//fmt.Println(n1)
+	n1.RemoveFile()
 }

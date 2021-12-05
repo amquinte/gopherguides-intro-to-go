@@ -20,6 +20,8 @@ type Ns struct {
 	sync.Once
 }
 
+const Filename = "backup.json"
+
 func (n *Ns) Start(ctx context.Context) (context.Context, error) {
 	return ctx, nil
 }
@@ -34,25 +36,61 @@ func (n *Ns) Save() error {
 	}
 
 	//Save json to backup.json file
-	const filename = "backup.json"
-	err = ioutil.WriteFile(filename, state, 0777)
+	//const Filename = "backup.json"
+	err = ioutil.WriteFile(Filename, state, 0777)
+	// if err != nil {
+	// 	return err
+	// }
 
 	fmt.Println("State was saved")
 	return nil
 }
 
 func (n *Ns) CreateFile() error {
-	const filename = "backup.json"
 
 	//Checks if file exists in current directory
 	//Creates the file if it does not already exits in current directory
-	f, _ := os.OpenFile(filename, os.O_RDWR|os.O_CREATE, 0777)
+	f, _ := os.OpenFile(Filename, os.O_RDWR|os.O_CREATE, 0777)
 	//Need to figure out how to test the below if statement for 100% coverage
 	// if err != nil {
-	// 	return err
+	// 	//return err
 	// }
 
 	// remember to close the file
 	defer f.Close()
 	return nil
+}
+
+func (n *Ns) LoadFile() error {
+	//Checks if file exists in current directory
+	//Creates the file if it does not already exits in current directory
+	f, _ := os.OpenFile(Filename, os.O_RDWR|os.O_CREATE, 0777)
+
+	//Need to figure out how to test the below if statement for 100% coverage
+	// if err != nil {
+	// 	//return err
+	// }
+
+	data, _ := ioutil.ReadFile(Filename)
+	var tmp Ns
+	json.Unmarshal(data, &tmp)
+
+	//Will have to update these once I finalize my Ns struct
+	n.Stopped = tmp.Stopped
+	n.Name = tmp.Name
+	n.Age = tmp.Age
+
+	// remember to close the file
+	defer f.Close()
+	return nil
+}
+
+func (n *Ns) RemoveFile() error {
+	return os.Remove(Filename)
+
+	// err := os.Remove(Filename)
+	// if err != nil {
+	// 	return err
+	// }
+	// return nil
 }
