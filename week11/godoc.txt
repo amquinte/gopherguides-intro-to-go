@@ -1,0 +1,34 @@
+$ go doc -all
+
+package week11 // import "week11"
+
+
+TYPES
+
+type NewsService struct {
+	cancel  context.CancelFunc
+	errs    chan error
+	subs    chan *Subscriber
+	Stopped bool
+	sync.RWMutex
+	sync.Once
+}
+    NewsService represents a news service
+
+type Ns = NewsService //Used an alias for NewsService for simpler func signatures
+
+
+func (n *Ns) Start(ctx context.Context) (context.Context, error)
+    Start will return a context and nill when News Service starts successfully 
+
+func (n *Ns) Save() error
+    Save will return nill if it saves successfully
+
+func (n *Ns) CreateFile() error
+    CreateFile wil return nill if the file was created successfully
+
+func (n *Ns) LoadFile() error
+    LoadFile will return nill if the file was loaded successfully
+
+func (n *Ns) RemoveFile() error
+    RemoveFile will return nill if the file was removed successfully
