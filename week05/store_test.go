@@ -1,7 +1,7 @@
 package demo
 
 import (
-	"fmt"
+	"errors"
 	"testing"
 )
 
@@ -11,7 +11,6 @@ func Test_Store_Db(t *testing.T) {
 	if act == nil {
 		t.Fatalf("Was expecting non-nil value")
 	}
-	fmt.Println("end of test store db")
 }
 
 func Test_Store_All(t *testing.T) {
@@ -19,10 +18,10 @@ func Test_Store_All(t *testing.T) {
 	tn := "cars"
 	_, err := s.All(tn)
 	exp := ErrTableNotFound{table: tn}
+	//expecting ErrTableNotFound
 	if err == exp {
 		t.Fatalf("expected:%s got:%s", exp, err)
 	}
-	fmt.Println("end of test store all")
 }
 
 func Test_Store_Insert(t *testing.T) {
@@ -40,7 +39,6 @@ func Test_Store_Insert(t *testing.T) {
 	if act != exp {
 		t.Fatalf("expected %d got %d", exp, act)
 	}
-	fmt.Println("end of test store insert")
 }
 
 func Test_Store_Select(t *testing.T) {
@@ -63,18 +61,18 @@ func Test_Store_Select(t *testing.T) {
 	}
 
 	//tests when no rows are found
-	// s2 := &Store{}
-	// _, err = s2.Select(tn, q)
-	// exp := errNoRows{clauses: q, table: tn}
-	// if err == nil {
-	// 	t.Fatalf("was expecting, %v but got nil instead", exp)
-	// }
+	x := Clauses{"vin": 143566735}
+	_, err = s.Select(tn, x)
+	exp := &errNoRows{clauses: x, table: tn}
+	res := errors.Is(err, exp)
+	if !res {
+		t.Fatalf("was expecting, %v but got %v instead", exp, err)
+	}
+
 	//tests when there is a query
 	q = Clauses{"Brand": "Ford"}
 	_, err = s.Select(tn, q)
 	if err != nil {
 		t.Fatalf("expected no error but got %s", err)
 	}
-
-	fmt.Println("end of test store select")
 }

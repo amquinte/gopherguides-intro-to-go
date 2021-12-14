@@ -1,7 +1,6 @@
 package demo
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -21,7 +20,6 @@ func Test_Clause_String(t *testing.T) {
 	if res != exp {
 		t.Fatalf("expected %s but got %s", exp, res)
 	}
-	fmt.Println("end of test clause string")
 }
 
 func Test_Clause_Match(t *testing.T) {
@@ -34,7 +32,6 @@ func Test_Clause_Match(t *testing.T) {
 	if res != exp {
 		t.Fatalf("expected %t but got %t", exp, res)
 	}
-	fmt.Println("end of test clause match")
 }
 
 func Test_Clause_Match_Error(t *testing.T) {
@@ -47,5 +44,4 @@ func Test_Clause_Match_Error(t *testing.T) {
 	if res != exp {
 		t.Fatalf("expected %t but got %t", exp, res)
 	}
-	fmt.Println("end of test clause match error")
 }
