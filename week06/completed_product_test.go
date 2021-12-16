@@ -13,7 +13,6 @@ import (
 // 	if errors.Is(act, exp) == false {
 // 		t.Fatalf("expect %v but got %v instead", exp, act)
 // 	}
-// 	fmt.Println("end of test")
 // }
 
 // func Test_CP_IsValid2(t *testing.T) {
@@ -24,7 +23,6 @@ import (
 // 	if errors.Is(act, exp) == false {
 // 		t.Fatalf("expect %v but got %v instead", exp, act)
 // 	}
-// 	fmt.Println("end of test")
 // }
 
 // func Test_CP_IsValid3(t *testing.T) {
@@ -34,9 +32,10 @@ import (
 // 	if act != nil {
 // 		t.Fatalf("expect nil but got %v instead", act)
 // 	}
-// 	fmt.Println("end of test")
 // }
 
+//This acomplishes the same tests as the ones above
+//Just re-wrote the tests using TDT
 func Test_CP_TDT(t *testing.T) {
 	t.Parallel()
 	table := []struct {

@@ -1,4 +1,9 @@
 mode: set
+github.com/amquinte/gopherguides-intro-to-go/week06/completed_product.go:10.44,11.46 1 1
+github.com/amquinte/gopherguides-intro-to-go/week06/completed_product.go:15.2,15.45 1 1
+github.com/amquinte/gopherguides-intro-to-go/week06/completed_product.go:19.2,19.12 1 1
+github.com/amquinte/gopherguides-intro-to-go/week06/completed_product.go:11.46,13.3 1 1
+github.com/amquinte/gopherguides-intro-to-go/week06/completed_product.go:15.45,17.3 1 1
 github.com/amquinte/gopherguides-intro-to-go/week06/employee.go:12.35,13.11 1 1
 github.com/amquinte/gopherguides-intro-to-go/week06/employee.go:17.2,17.30 1 1
 github.com/amquinte/gopherguides-intro-to-go/week06/employee.go:13.11,15.3 1 1
@@ -55,8 +60,3 @@ github.com/amquinte/gopherguides-intro-to-go/week06/product.go:64.2,64.20 1 1
 github.com/amquinte/gopherguides-intro-to-go/week06/product.go:68.2,68.12 1 1
 github.com/amquinte/gopherguides-intro-to-go/week06/product.go:60.36,62.3 1 1
 github.com/amquinte/gopherguides-intro-to-go/week06/product.go:64.20,66.3 1 1
-github.com/amquinte/gopherguides-intro-to-go/week06/completed_product.go:10.44,11.46 1 1
-github.com/amquinte/gopherguides-intro-to-go/week06/completed_product.go:15.2,15.45 1 1
-github.com/amquinte/gopherguides-intro-to-go/week06/completed_product.go:19.2,19.12 1 1
-github.com/amquinte/gopherguides-intro-to-go/week06/completed_product.go:11.46,13.3 1 1
-github.com/amquinte/gopherguides-intro-to-go/week06/completed_product.go:15.45,17.3 1 1
