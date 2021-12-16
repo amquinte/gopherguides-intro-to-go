@@ -49,9 +49,4 @@ func Test_Employee_Work_Ok(t *testing.T) {
 		t.Fatalf("expected %v, got %v", exp, act)
 	}
 	<-m.Completed()
-	// exp = ErrInvalidEmployee(-1)
-	// if act != exp {
-	// 	t.Fatalf("expected %v, got %v", exp, act)
-	// }
-	// fmt.Println("Test employee passed")
 }
