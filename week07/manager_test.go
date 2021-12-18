@@ -47,8 +47,8 @@ func Test_Manager_Run(t *testing.T) {
 	t.Parallel()
 	//m := NewManager()
 	//ctx, cancel := context.WithCancel(context.Background())
-	//ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
-	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel = signal.NotifyContext(ctx, os.Interrupt)
 	defer cancel()
 	p := Product{Quantity: 1}
 	// time.Sleep(time.Second * 10)
@@ -62,7 +62,7 @@ func Test_Manager_Run(t *testing.T) {
 	if act != exp {
 		t.Fatalf("expected %v, got %v", exp, act)
 	}
-	//<-ctx.Done()
+	<-ctx.Done()
 	fmt.Println("end of test manager run")
 }
 
