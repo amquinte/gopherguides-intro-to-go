@@ -3,6 +3,7 @@ package week07
 import (
 	"context"
 	"fmt"
+	"sync"
 )
 
 // Manager is responsible for receiving product orders
@@ -18,6 +19,8 @@ type Manager struct {
 	jobs      chan *Product
 	stopped   bool
 	cancel    context.CancelFunc
+	sync.RWMutex
+	sync.Once
 }
 
 // NewManager will create a new Manager.
@@ -42,7 +45,9 @@ func (m *Manager) Start(ctx context.Context, count int) (context.Context, error)
 	}
 
 	ctx, cancel := context.WithCancel(ctx)
+	m.Lock()
 	m.cancel = cancel
+	m.Unlock()
 
 	go func(ctx context.Context) {
 		<-ctx.Done()
@@ -66,9 +71,12 @@ func (m *Manager) Start(ctx context.Context, count int) (context.Context, error)
 // as employeess become available. An invalid product
 // will return an error.
 func (m *Manager) Assign(products ...*Product) error {
+	m.RLock()
 	if m.stopped {
+		m.RUnlock()
 		return ErrManagerStopped{}
 	}
+	m.RUnlock()
 
 	// loop through each product and assign it to an employee
 	for _, p := range products {
@@ -101,10 +109,12 @@ func (m *Manager) Complete(e Employee, p *Product) error {
 		return err
 	}
 
+	//p.Lock()
 	cp := CompletedProduct{
 		Employee: e,
 		Product:  *p, // deference pointer to value type ype t
 	}
+	//p.Unlock()
 
 	// Send completed product to Completed() channel
 	// for a listener to receive it.
@@ -116,6 +126,8 @@ func (m *Manager) Complete(e Employee, p *Product) error {
 
 // completedCh returns the channel for CompletedProducts
 func (m *Manager) completedCh() chan CompletedProduct {
+	m.Lock()
+	defer m.Unlock()
 	return m.completed
 }
 
@@ -129,23 +141,31 @@ func (m *Manager) Completed() <-chan CompletedProduct {
 // Jobs will return a channel that can be listened to
 // for new products to be built.
 func (m *Manager) Jobs() chan *Product {
+	m.Lock()
+	defer m.Unlock()
 	return m.jobs
 }
 
 // Errors will return a channel that can be listened to
 // and can be used to receive errors from employees.
 func (m *Manager) Errors() chan error {
+	m.Lock()
+	defer m.Unlock()
 	return m.errs
 }
 
 // Stop will stop the manager and clean up all resources.
 func (m *Manager) Stop() {
-	//defer m.cancel()
+	m.RLock()
 	if m.stopped {
+		m.RUnlock()
 		return
 	}
+	m.RUnlock()
 
+	m.Lock()
 	m.stopped = true
+	m.Unlock()
 
 	// close all channels
 	close(m.jobs)
@@ -180,18 +200,18 @@ func Run(ctx context.Context, count int, products ...*Product) ([]CompletedProdu
 	var completed []CompletedProduct
 	go func() {
 
+		//m.Lock()
 		for cp := range m.Completed() {
 			completed = append(completed, cp)
 
 			if len(completed) >= len(products) {
-				//<-ctx.Done()
-				//cancel()
 				m.Stop()
 			}
 		}
+		//m.Unlock()
 	}()
-	// fmt.Println("calling done")
 	<-ctx.Done()
-	fmt.Println("end of Run")
+	m.RLock()
+	defer m.RUnlock()
 	return completed, nil
 }

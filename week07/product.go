@@ -2,6 +2,7 @@ package week07
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -12,11 +13,14 @@ type Product struct {
 	// non-exported fields (PRIVATE)
 	// !YOU MAY NOT ACCESS THESE FIELDS IN YOUR TESTS!
 	builtBy Employee
+	sync.RWMutex
 }
 
 // BuiltBy returns the employee that built the product.
 // A return value of "0" means no employee has built the product yet.
-func (p Product) BuiltBy() Employee {
+func (p *Product) BuiltBy() Employee {
+	p.RLock()
+	defer p.RUnlock()
 	return p.builtBy
 }
 
@@ -38,15 +42,19 @@ func (p *Product) Build(e Employee) error {
 	// build the product here
 	time.Sleep(time.Millisecond * time.Duration(p.Quantity))
 
+	p.Lock()
 	// mark the product as built
 	p.builtBy = e
+	p.Unlock()
 
 	return nil
 }
 
 // IsValid returns an error if the product is invalid.
 // A valid product has a quantity > 0.
-func (p Product) IsValid() error {
+func (p *Product) IsValid() error {
+	p.RLock()
+	defer p.RUnlock()
 	if p.Quantity <= 0 {
 		return ErrInvalidQuantity(p.Quantity)
 	}
@@ -61,6 +69,8 @@ func (p Product) IsBuilt() error {
 		return err
 	}
 
+	// p.RLock()
+	// defer p.RUnlock()
 	if p.builtBy == 0 {
 		return ErrProductNotBuilt(fmt.Sprintf("product is not built: %v", p))
 	}

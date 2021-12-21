@@ -15,10 +15,6 @@ func Test_Run(t *testing.T) {
 	t.Parallel()
 	m := NewManager()
 
-	// ctx, cancel := context.WithCancel(context.Background())
-	// defer cancel()
-
-	// fmt.Println("running test run")
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
 
@@ -33,25 +29,15 @@ func Test_Run(t *testing.T) {
 
 	<-ctx.Done()
 
-	//time.Sleep(time.Second * 30)
-	// Tests you will need to write:
-
-	// TODO: timeout after 5 seconds if nothing happens
-	// TODO: interruption by a signal
-	// TODO: Run returns when the products are completed
-	// TODO: test that the output is correct
-
 }
 
 func Test_Manager_Run(t *testing.T) {
 	t.Parallel()
-	//m := NewManager()
-	//ctx, cancel := context.WithCancel(context.Background())
-	//ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
-	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+	//Context will cancel if user interrupts or after 10 seconds have passed
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel = signal.NotifyContext(ctx, os.Interrupt)
 	defer cancel()
 	p := Product{Quantity: 1}
-	// time.Sleep(time.Second * 10)
 	cp, err := Run(ctx, 1, &p)
 	if err != nil {
 		t.Fatalf("expected nil, got %v", err)
@@ -62,8 +48,7 @@ func Test_Manager_Run(t *testing.T) {
 	if act != exp {
 		t.Fatalf("expected %v, got %v", exp, act)
 	}
-	//<-ctx.Done()
-	fmt.Println("end of test manager run")
+	<-ctx.Done()
 }
 
 func Test_Manager_InvalidEmployeeCount(t *testing.T) {
