@@ -2,7 +2,7 @@ package week07
 
 import (
 	"context"
-	"sync"
+	"fmt"
 )
 
 // Manager is responsible for receiving product orders
@@ -18,8 +18,6 @@ type Manager struct {
 	jobs      chan *Product
 	stopped   bool
 	cancel    context.CancelFunc
-	sync.RWMutex
-	sync.Once
 }
 
 // NewManager will create a new Manager.
@@ -48,7 +46,7 @@ func (m *Manager) Start(ctx context.Context, count int) (context.Context, error)
 
 	go func(ctx context.Context) {
 		<-ctx.Done()
-		//fmt.Println(ctx.Err())
+		fmt.Println(ctx.Err())
 		cancel()
 		m.Stop()
 
@@ -118,8 +116,6 @@ func (m *Manager) Complete(e Employee, p *Product) error {
 
 // completedCh returns the channel for CompletedProducts
 func (m *Manager) completedCh() chan CompletedProduct {
-	m.Lock()
-	defer m.Unlock()
 	return m.completed
 }
 
@@ -145,24 +141,20 @@ func (m *Manager) Errors() chan error {
 // Stop will stop the manager and clean up all resources.
 func (m *Manager) Stop() {
 	//defer m.cancel()
-	m.Once.Do(func() {
+	if m.stopped {
+		return
+	}
 
-		if m.stopped {
-			return
-		}
+	m.stopped = true
 
-		m.stopped = true
+	// close all channels
+	close(m.jobs)
+	close(m.errs)
 
-		// close all channels
-		close(m.jobs)
-		close(m.errs)
-
-		//Might need this
-		if m.completed != nil {
-			close(m.completed)
-		}
-	})
-
+	//Might need this
+	if m.completed != nil {
+		close(m.completed)
+	}
 }
 
 // snippet: example
@@ -188,24 +180,18 @@ func Run(ctx context.Context, count int, products ...*Product) ([]CompletedProdu
 	var completed []CompletedProduct
 	go func() {
 
-		//m.Lock()
-
 		for cp := range m.Completed() {
-			m.Lock()
 			completed = append(completed, cp)
-			//m.Unlock()
+
 			if len(completed) >= len(products) {
 				//<-ctx.Done()
 				//cancel()
 				m.Stop()
 			}
 		}
-		defer m.Unlock()
 	}()
-	// m.Lock()
-	// defer m.Unlock()
 	// fmt.Println("calling done")
 	<-ctx.Done()
-	//fmt.Println("end of Run")
+	fmt.Println("end of Run")
 	return completed, nil
 }
